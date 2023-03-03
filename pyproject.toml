@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 100
+
+[flake8]
+max-line-length = 100
+exclude = .git, __pycache__, venv
+ignore = E266
+max-complexity = 18
+
+[tool.pytest]
+addopts = --verbose
