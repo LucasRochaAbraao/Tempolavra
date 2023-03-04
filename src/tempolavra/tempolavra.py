@@ -7,59 +7,20 @@ from datetime import datetime
 
 from src.tempolavra.time_to_text import get_time_phrase
 
-# TODO:
-# - print letter coords (to simulate leds)
-# - random functions, such as turn on all LEDs (for quality testing)
-# - da /horas/manhã/noite 10% de chance por hora (para hora inteira)
-# - if less than 4 words, append 'noite/manhã/tarde' (except: meio dia/noite)
-# - Draw stuff randomly for 5 minutes, or until button pressed.
-# - If button pressed, draw for 30 minutes or until button pressed again.
-# - new years countdown
-
-# fmt: off
-# Colors
-RED     = (255, 0, 0)
-LIME    = (0, 255, 0)
-BLUE    = (0, 0, 255)
-YELLOW  = (255, 255, 0)
-FUCHSIA = (255, 0, 255)
-AQUA    = (0, 255, 255)
-WHITE   = (255, 255, 255)
-
-special_words = {
-    "24.08": [],
-    "": [],
-    "": [],
-    "": [],
-}  # month.day - datetime.now().strftime("%d.%m")
-
-# special dates = {""}
-
-"""
-This are the possible words per row
-0  sao é
-1  tres cinco
-2  uma quatro vinte
-3  duas oito
-4  onze seis dez
-5  nove quinze u
-6  doze sete e
-7  pras meio dia da e
-8  vinte meia quinze
-9  noite trinta e
-10 nove duas uma sete
-11 dez seis oito
-12 quatro tres cinco
-13 horas dia e meia da
-14 manhã tarde noite
-"""
-
 
 # fmt: off
 def get_matrix(coords: list) -> list[str]:
-    leds_to_activate = list()
-    
-    matrix = [
+    """
+    Return a list of LEDs to activate based on given coordinates in the matrix.
+
+        Args:
+            coords (list): List of tuples representing coordinates in the matrix.
+
+        Returns:
+            list[str]: List of strings representing the LEDs to activate.
+    """
+
+    letter_matrix = [
         #     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
         ['S', 'Ã', 'O', 'É', 'O', 'J', 'G', 'T', 'U', 'R', 'W', 'Z', 'N', 'X', 'A'],  # 0 sao é
         ['E', 'T', 'R', 'Ê', 'S', 'C', 'I', 'N', 'C', 'O', 'A', 'R', 'I', 'K', 'A'],  # 1 tres cinco
@@ -79,13 +40,26 @@ def get_matrix(coords: list) -> list[str]:
         #     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
     ]
 
+    leds_to_activate = list()
     for word_coords in coords:
-        #print(f"word_coords: {word_coords}")
-        leds_to_activate.append(matrix[word_coords[0]][word_coords[1]])
+        leds_to_activate.append(letter_matrix[word_coords[0]][word_coords[1]])
     return leds_to_activate
 
 
 def tempolavra(current_hour: int = 0, current_minute: int = 0) -> list[str]:
+    """
+        Takes current hour and minute as input and returns a list of strings to display the time
+        in "TempoLavra" LED matrix format (currently the app only prints to the terminal, but will
+        eventually run in an embedded board like the ESP32).
+
+        Args:
+            current_hour (int): Current hour in 24-hour format. Defaults to 0.
+            current_minute (int): Current minute. Defaults to 0.
+
+        Returns:
+            List[str]: List of strings to display the time in "TempoLavra" LED matrix format. This
+            currently returns strings, but will eventually become LED indexes.
+    """
     # TODO: Move these comments to a new test.
     #interval = 0
     # for _ in range(291):
@@ -129,7 +103,8 @@ def tempolavra(current_hour: int = 0, current_minute: int = 0) -> list[str]:
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
-        current_time_in_words = tempolavra(int(sys.argv[1]), int(sys.argv[2])) # it's not pretty, but will remain for debuggin purposes (for now)
+        # it's not pretty, but will remain for debuggin purposes (for now)
+        current_time_in_words = tempolavra(int(sys.argv[1]), int(sys.argv[2]))
     else:
         current_time_in_words = tempolavra()
 

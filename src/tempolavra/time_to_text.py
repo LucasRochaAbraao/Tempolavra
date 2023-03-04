@@ -6,12 +6,31 @@ from src.tempolavra.time_coords import get_coord_hour, get_coord_minute, WordPos
 
 
 def flip_coin(weight: float) -> bool:
+    """
+    Simulates a coin flip with a given weight bias.
+
+    Args:
+        weight (float): A value between 0 and 1 representing the weight or bias.
+
+    Returns:
+        bool: Returns True if a random value is less than the given weight and False otherwise.
+    """
     reference = random.getrandbits(3) / 7
     return True if weight >= reference else False
 
 
 def get_time_phrase(hour: int, minute: int) -> list[list[tuple[int, int]]]:
-    # print(hour, minute)
+    """
+        Creates the phrase from a list of words that can be used to make up the word clock.
+
+        Args:
+            hour (int): The hour value of the time to be displayed (0-23).
+            minute (int): The minute value of the time to be displayed (0-59).
+
+        Returns:
+            list[list[tuple[int, int]]]: A list of coordinates that make up the word positions in a matrix.
+    """
+
     coords = list()  # create coordinates to activate leds in a matrix
 
     if minute > 55:
