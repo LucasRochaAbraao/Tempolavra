@@ -1,23 +1,33 @@
 # TODO
 # > rank words by frequency of letters or rank individual letters
 # > create a dict with an index for each letter
-# > print a sample frontplate to the terminal
+# > print a sample front plate to the terminal
 
-sao é
-tres cinco
-uma quatro vinte
-duas oito
-onze seis dez
-nove quinze u (eu)
-doze sete e (te com o 'e' debaixo)
-pras meio dia da e
-vinte meia quinze
-noite trinta e
-nove duas uma sete
-(amo) dez seis oito
-quatro tres cinco
-horas dia e meia da
-manhã tarde noite
+### Colors
+RED     = (255, 0, 0)
+LIME    = (0, 255, 0)
+BLUE    = (0, 0, 255)
+YELLOW  = (255, 255, 0)
+FUCHSIA = (255, 0, 255)
+AQUA    = (0, 255, 255)
+WHITE   = (255, 255, 255)
+
+### This are the possible words per row
+0  sao é
+1  tres cinco
+2  uma quatro vinte
+3  duas oito
+4  onze seis dez
+5  nove quinze u
+6  doze sete e
+7  pras meio dia da e
+8  vinte meia quinze
+9  noite trinta e
+10 nove duas uma sete
+11 dez seis oito
+12 quatro tres cinco
+13 horas dia e meia da
+14 manhã tarde noite
 
 
 S   Ã   O   É   O   J   G   T   U   R   W   Z   N   X   A  -
@@ -53,18 +63,18 @@ H195 O196 R197 A198 S199 D200 I201 A202 E203 M204 E205 I206 A207 D208 A209
 M210 A211 N212 H213 Ã214 T215 A216 R217 D218 E219 N220 O221 I222 T223 E224
 
 # TODO:
-- função para ligar todas as leds
-- E pode ser qualquer um (choice entre opções)
-- da /horas/manhã/noite 10% de chance por hora (hora inteira)
-- se menos que 4 palavras, coloca o da noite/manhã/tarde (exceto meio dia/noite)
-- Draw stuff randomly for 5 minutes, or until button pressed. If
-button pressed first, draw for 30 minutes or until button pressed again.
+- print letter coords (to simulate leds)
+- random functions, such as turn on all LEDs (for quality testing)
+- da /horas/manhã/noite 10% de chance por hora (para hora inteira)
+- if less than 4 words, append 'noite/manhã/tarde' (except: meio dia/noite)
+- Draw stuff randomly for 5 minutes, or until button pressed.
+- If button pressed, draw for 30 minutes or until button pressed again.
+- new years countdown
+- special dates
 
-
-Hardware:
-- MDF 55x55cm 3mm thick.
-- Some material to set up the LEDs compartment (like a fence).
+### Hardware:
+- MDF 55x55cm 3mm thick (prototype, eventually build it smaller).
+- Some material to set up the LEDs compartment (eg. a fence).
 - 3mm acrylic sheet, 55cm2 (maybe glass depending on how the acrylic looks).
-- print from local shop: black filme with cut letters design.
+- print from local shop: black film with cut letters design.
 - LED wiring
-- 

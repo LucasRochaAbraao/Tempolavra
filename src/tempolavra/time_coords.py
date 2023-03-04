@@ -9,9 +9,21 @@ class WordPosition:
 
 # fmt: off
 def get_coord_hour(hour: int, pos: int = WordPosition.primary) -> list[tuple[int, int]]:
-    # hour = 3 or 15
-    # pos = primary (0) or secondary(1) positions. For exemple, in 'são vinte pras dez'
-    # 'dez' is in the secondary hour position.
+    """
+    Given an hour and a position, returns a list of coordinates (tuples) in the matrix that correspond
+    to the hour.
+
+    Args:
+        hour (int): An integer representing the hour in the range 0 to 23.
+        pos (int, optional): An optional integer representing the position of the hour word in the sentence.
+            It can be either WordPosition.primary or WordPosition.secondary, defaulting to WordPosition.primary.
+            This represents where the hour is in the time phrase. For example, in 'são cinco pras dez',
+            'dez' is in the secondary hour position, while 'cinco' is in the primary.
+
+    Returns:
+        list[tuple[int, int]]: A list of tuples with two integers representing the (row, column) coordinates
+        in a clock where the hour word starts.
+    """
 
     time_words = {
         #     primary   secondary
@@ -63,9 +75,26 @@ def get_coord_hour(hour: int, pos: int = WordPosition.primary) -> list[tuple[int
 
 # fmt: off
 def get_coord_minute(minute: int, pos: int = WordPosition.primary) -> list[tuple[int, int]]:
-    # minute = 30 or 15
-    # pos = primary (0) or secondary(1) positions. For exemple, in 'são vinte pras dez'
-    # 'vinte' is in the primary minute position.
+    """
+    Returns the coordinate tuples of the minute word, corresponding to a given minute and position.
+
+    Args:
+        minute (int): The minute value, which must be one of 5, 10, 15, 20, or 30.
+        pos (int, optional): The position of the minute word in the time expression, which can be either
+        WordPosition.primary (0) or WordPosition.secondary (1). Defaults to WordPosition.primary. For
+        example, in 'são vinte pras dez', 'vinte' is in the primary minute position, while 'vinte' is in
+        the secondary position.
+
+    Returns:
+        list[tuple[int, int]]: A list of coordinate tuples corresponding to the specified minute and position.
+        Each tuple contains two integers that represent the row and column indices of a word in the time grid.
+        The row index ranges from 1 to 13 and the column index ranges from 0 to 14.
+        For example, [(1, 5), (1, 6), ..., (1, 9)] corresponds to the word 'cinco' in the primary position,
+        which is located in the first row, from column 5 to 9 inclusive.
+
+    Raises:
+        KeyError: If the specified minute value is not supported.
+    """
 
     time_words = {
         #     primary   secondary
