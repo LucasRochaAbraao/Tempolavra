@@ -1,0 +1,22 @@
+site_name: Tempolavra
+repo_url: https://github.com/LucasRochaAbraao/Tempolavra
+repo_name: Tempolavra
+edit_uri: tree/main/docs
+
+theme:
+  name: material
+  # language: pt-BR
+  # logo: assets/logo.png (already knows to look inside docs/)
+  # favicon: assets/logo.png
+
+markdown_extensions:
+  - attr_list
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - mkdocstrings:
+    handlers:
+      python:
+        paths: [tempolavra]
