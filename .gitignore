@@ -3,3 +3,4 @@ esp8266/
 __pycache__/
 .idea/
 .venv/
+.coverage

@@ -2,10 +2,9 @@
 # coding=utf-8
 
 import sys
-
 from datetime import datetime
 
-from src.tempolavra.time_to_text import get_time_phrase
+from tempolavra.time_to_text import get_time_phrase
 
 
 # fmt: off

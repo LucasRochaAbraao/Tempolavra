@@ -1,4 +1,4 @@
-from src.tempolavra.tempolavra import tempolavra
+from tempolavra.tempolavra import tempolavra
 
 
 def test_tempolavra():

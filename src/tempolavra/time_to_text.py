@@ -2,7 +2,7 @@
 
 import random
 
-from src.tempolavra.time_coords import get_coord_hour, get_coord_minute, WordPosition
+from tempolavra.time_coords import WordPosition, get_coord_hour, get_coord_minute
 
 
 def flip_coin(weight: float) -> bool:
@@ -21,14 +21,14 @@ def flip_coin(weight: float) -> bool:
 
 def get_time_phrase(hour: int, minute: int) -> list[list[tuple[int, int]]]:
     """
-        Creates the phrase from a list of words that can be used to make up the word clock.
+    Creates the phrase from a list of words that can be used to make up the word clock.
 
-        Args:
-            hour (int): The hour value of the time to be displayed (0-23).
-            minute (int): The minute value of the time to be displayed (0-59).
+    Args:
+        hour (int): The hour value of the time to be displayed (0-23).
+        minute (int): The minute value of the time to be displayed (0-59).
 
-        Returns:
-            list[list[tuple[int, int]]]: A list of coordinates that make up the word positions in a matrix.
+    Returns:
+        list[list[tuple[int, int]]]: A list of coordinates that make up the word positions in a matrix.
     """
 
     coords = list()  # create coordinates to activate leds in a matrix
