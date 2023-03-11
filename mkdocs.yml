@@ -17,6 +17,6 @@ extra_css:
 
 plugins:
   - mkdocstrings:
-    handlers:
-      python:
-        paths: [tempolavra]
+      handlers:
+        python:
+          paths: [tempolavra]

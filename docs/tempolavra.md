@@ -1,0 +1,1 @@
+::: tempolavra.tempolavra

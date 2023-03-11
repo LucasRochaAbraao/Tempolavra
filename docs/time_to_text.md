@@ -1,0 +1,1 @@
+::: tempolavra.time_to_text

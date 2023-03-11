@@ -13,14 +13,23 @@ def get_matrix(coords: list) -> list[str]:
     Return a list of LEDs to activate based on given coordinates in the matrix.
 
         Args:
-            coords (list): List of tuples representing coordinates in the matrix.
+            coords: List of tuples representing coordinates in the matrix.
 
         Returns:
-            list[str]: List of strings representing the LEDs to activate.
+            List of strings representing the LEDs to activate.
+
+        Examples
+        --------
+
+        >>> get_matrix([(0, 0), (0, 1), (0, 2)])
+        ['S', 'Ã', 'O']
+
+        >>> get_matrix([(0, 3)])
+        ['É']
     """
 
     letter_matrix = [
-        #     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
+        # 0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
         ['S', 'Ã', 'O', 'É', 'O', 'J', 'G', 'T', 'U', 'R', 'W', 'Z', 'N', 'X', 'A'],  # 0 sao é
         ['E', 'T', 'R', 'Ê', 'S', 'C', 'I', 'N', 'C', 'O', 'A', 'R', 'I', 'K', 'A'],  # 1 tres cinco
         ['U', 'M', 'A', 'Q', 'U', 'A', 'T', 'R', 'O', 'P', 'V', 'I', 'N', 'T', 'E'],  # 2 uma quatro vinte
@@ -36,7 +45,7 @@ def get_matrix(coords: list) -> list[str]:
         ['Q', 'U', 'A', 'T', 'R', 'O', 'T', 'R', 'E', 'S', 'C', 'I', 'N', 'C', 'O'],  # 12 quatro tres cinco
         ['H', 'O', 'R', 'A', 'S', 'D', 'I', 'A', 'E', 'M', 'E', 'I', 'A', 'D', 'A'],  # 13 horas dia e meia da
         ['M', 'A', 'N', 'H', 'Ã', 'T', 'A', 'R', 'D', 'E', 'N', 'O', 'I', 'T', 'E']  # 14 manhã tarde noite
-        #     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
+        # 0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
     ]
 
     leds_to_activate = list()
@@ -52,12 +61,12 @@ def tempolavra(current_hour: int = 0, current_minute: int = 0) -> list[str]:
         eventually run in an embedded board like the ESP32).
 
         Args:
-            current_hour (int): Current hour in 24-hour format. Defaults to 0.
-            current_minute (int): Current minute. Defaults to 0.
+            current_hour: Current hour in 24-hour format. Defaults to 0.
+            current_minute: Current minute. Defaults to 0.
 
         Returns:
-            List[str]: List of strings to display the time in "TempoLavra" LED matrix format. This
-            currently returns strings, but will eventually become LED indexes.
+            List of strings to display the time in "TempoLavra" LED matrix format. This
+                currently returns strings, but will eventually become LED indexes.
     """
     # TODO: Move these comments to a new test.
     #interval = 0
