@@ -55,6 +55,7 @@ The esp32 project was put on hold, as the memory available on that board is real
 ---
 
 TODO:
+- think about the possibility of abastracting/separating word indexing and getting the time, to allow for different front plate design.
 - cli flag to print letter coords (to simulate leds) instead of actual time.
 - random functions, such as turn on all LEDs (for quality testing)
 - 10% chance of getting "da /horas/manhã/noite" per hour (for the whole hour)
@@ -62,3 +63,4 @@ TODO:
 - Small % to animate stuff randomly for 5 minutes, or until button pressed.
 - If button pressed, animate for 30 minutes or until button pressed again.
 - new years countdown ?
+- throw docs assets (like a package logo) in docs/assets
