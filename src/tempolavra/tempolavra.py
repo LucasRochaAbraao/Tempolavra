@@ -17,6 +17,9 @@ def get_matrix(coords: list) -> list[str]:
 
         Returns:
             List of strings representing the LEDs to activate.
+        
+        Note:
+            For embedded version, will return LED index instead of letter string.
 
         Examples
         --------
@@ -54,7 +57,7 @@ def get_matrix(coords: list) -> list[str]:
     return leds_to_activate
 
 
-def tempolavra(current_hour: int = 0, current_minute: int = 0) -> list[str]:
+def main(current_hour: int = 0, current_minute: int = 0) -> list[str]:
     """
         Takes current hour and minute as input and returns a list of strings to display the time
         in "TempoLavra" LED matrix format (currently the app only prints to the terminal, but will
@@ -68,39 +71,6 @@ def tempolavra(current_hour: int = 0, current_minute: int = 0) -> list[str]:
             List of strings to display the time in "TempoLavra" LED matrix format. This
                 currently returns strings, but will eventually become LED indexes.
     """
-    # TODO: Move these comments to a new test.
-    #interval = 0
-    # for _ in range(291):
-    #    #time_reference = datetime.now() - timedelta(hours=10, minutes=30)
-    #    #time_reference.time()
-    #    #time_reference = datetime.now().time()
-    #    time_reference = datetime.now() + timedelta(minutes=interval)
-    #    current_minute = 5 * round(time_reference.minute/5)
-    #    current_hour = time_reference.hour
-    #    if current_minute == 60:
-    #        current_minute = 0
-    #        if current_hour != 23:
-    #            current_hour += 1
-    #        else:
-    #            current_hour = 0
-    #    display_phrase = get_time_phrase(current_hour, current_minute)
-    #    final_phrase = [''.join(get_matrix(word_list)) for word_list in display_phrase]
-    #    print(f"{current_hour}:{current_minute}", ' '.join(final_phrase))
-    #    #print(time_reference)
-    #    interval += 5
-
-    time_reference = datetime.now()
-    if current_hour == 0:
-        current_hour: int = time_reference.hour
-    if current_minute == 0:
-        current_minute: int = 5 * round(time_reference.minute/5)
-
-    if current_minute == 60:
-        current_minute = 0
-        if current_hour != 23:
-            current_hour += 1
-        else:
-            current_hour = 0
 
     display_phrase: list = get_time_phrase(current_hour, current_minute)
     final_phrase: list = [''.join(get_matrix(word_list))
@@ -109,11 +79,11 @@ def tempolavra(current_hour: int = 0, current_minute: int = 0) -> list[str]:
     return final_phrase
 
 
-if __name__ == '__main__':
-    if len(sys.argv) == 3:
+# pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
+    if len(sys.argv) == 3:  # pragma: no cover
         # it's not pretty, but will remain for debuggin purposes (for now)
-        current_time_in_words = tempolavra(int(sys.argv[1]), int(sys.argv[2]))
-    else:
-        current_time_in_words = tempolavra()
-
-    print(' '.join(current_time_in_words))
+        current_time_in_words = main(int(sys.argv[1]), int(sys.argv[2]))  # pragma: no cover
+    else:  # pragma: no cover
+        current_time_in_words = main()  # pragma: no cover
+    print(' '.join(current_time_in_words))  # pragma: no cover

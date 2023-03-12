@@ -13,9 +13,6 @@ profile = "black"
 line_length = 100
 extend_skip = "esp8266/"
 
-[tool.pytest]
-addopts = ["--verbose"]
-
 [tool.poetry]
 name = "tempolavra"
 version = "0.1.0"
@@ -39,6 +36,9 @@ taskipy = "^1.10.3"
 mkdocs-material = "^9.1.0"
 mkdocstrings = "^0.20.0"
 mkdocstrings-python = "^0.8.3"
+
+[tool.pytest]
+addopts = ["--verbose"]
 
 [tool.pytest.ini_options]
 pythonpath = "."

@@ -14,7 +14,16 @@ def flip_coin(weight: float) -> bool:
 
     Returns:
         Returns True if a random value is less than the given weight and False otherwise.
+
+    Raises:
+        ValueError: If the weight is not between 0 and 1.
     """
+
+    if weight < 0 or weight > 1:
+        raise ValueError("Weight must be between 0 and 1")
+    if weight == 0:
+        return False
+
     reference = random.getrandbits(3) / 7
     return True if weight >= reference else False
 
@@ -33,19 +42,20 @@ def get_time_phrase(hour: int, minute: int) -> list[list[tuple[int, int]]]:
 
     coords = list()  # create coordinates to activate leds in a matrix
 
-    if minute > 55:
-        if hour != 23:  # qualquer hora menos 23
-            hour += 1  # arredonda para próxima hora de uma vez
+    minute = 5 * round(minute / 5)  # make minute a multiple of 5 (wordclock precision)
+    if minute == 60:
+        minute = 0  # rounds minutes above 55 to the next hour.
+        if hour != 23:  # any hour except 23
+            hour += 1  # round up to the next hour in this case
         else:
-            hour = 0  # mas se a hora era 23, a próxima precisa ser 0 e não 24.
-        minute = 0  # arredonda minutos acima de 55 para próxima hora.
+            hour = 0  # except when the hour is 23, in which case it needs to be 0 and not 24.
 
     # é 1h..., é meio dia..., é meia noite...
     if (hour == 1 or hour == 12 or hour == 13 or hour == 0) and minute == 0:
         # if flip_coin(weight=0.9): # weight returns True or False
         #    phrase += ['é']
-        # ainda tenho que ajustar essa probabilidade de não ter o 'é' ou 'são',
-        # pq olha como pode sair: dez cinco pras da noite 21:55
+        # I still need to adjust the probability of not including "é" or "são",
+        # because it could come out as: dez cinco pras da noite 21:55.
         coords.append([(0, 3)])  # é
         # phrase += matrix[time_words2['é'][0]][matrix[time_words2['é'][0]]]
     else:
@@ -64,24 +74,13 @@ def get_time_phrase(hour: int, minute: int) -> list[list[tuple[int, int]]]:
         coords.append([(14, 10), (14, 11), (14, 12), (14, 13), (14, 14)])  # noite
         if minute == 0:
             return coords
-    # se não for exatamente, como acima.
-    elif hour == 23 and minute > 55 or hour == 0 and minute < 3:
-        coords = list()
-        coords.append([(0, 3)])  # é
-        coords.append([(8, 5), (8, 6), (8, 7), (8, 8)])  # meia
-        coords.append([(14, 10), (14, 11), (14, 12), (14, 13), (14, 14)])  # noite
-        return coords
+
     elif hour == 12:
         coords.append([(7, 4), (7, 5), (7, 6), (7, 7)])  # meio
         coords.append([(7, 9), (7, 10), (7, 11)])  # dia
         if minute == 0:
             return coords
-    elif hour == 11 and minute > 55 or hour == 12 and minute == 0:
-        coords = list()
-        coords.append([(0, 3)])  # é
-        coords.append([(7, 4), (7, 5), (7, 6), (7, 7)])  # meio
-        coords.append([(7, 9), (7, 10), (7, 11)])  # dia
-        return coords
+
     else:  # if not one of the special words above, get the hour coords
         coords.append(get_coord_hour(hour, pos=WordPosition.primary))
 
@@ -99,8 +98,12 @@ def get_time_phrase(hour: int, minute: int) -> list[list[tuple[int, int]]]:
         elif 12 < hour < 18:
             coords.append([(13, 0), (13, 1), (13, 2), (13, 3), (13, 4)])  # horas
             if flip_coin(weight=0.5):  # weight returns True or False
-                coords.append([(13, 13), (13, 14)])  # da
-                coords.append([(14, 5), (14, 6), (14, 7), (14, 8), (14, 9)])  # tarde
+                coords.append(
+                    [(13, 13), (13, 14)]  # pragma: no cover
+                )  # da (this is flaky in test coverage because of weighted chance)
+                coords.append(
+                    [(14, 5), (14, 6), (14, 7), (14, 8), (14, 9)]  # pragma: no cover
+                )  # tarde (also flaky for same reason)
         else:
             coords.append([(13, 0), (13, 1), (13, 2), (13, 3), (13, 4)])  # horas
             if flip_coin(weight=0.6):  # weight returns True or False
