@@ -72,6 +72,12 @@ def main(current_hour: int = 0, current_minute: int = 0) -> list[str]:
                 currently returns strings, but will eventually become LED indexes.
     """
 
+    time_reference = datetime.now() # pragma: no cover
+    if current_hour == 0: # pragma: no cover
+        current_hour: int = time_reference.hour # pragma: no cover
+    if current_minute == 0: # pragma: no cover
+        current_minute: int = 5 * round(time_reference.minute/5) # pragma: no cover
+
     display_phrase: list = get_time_phrase(current_hour, current_minute)
     final_phrase: list = [''.join(get_matrix(word_list))
                     for word_list in display_phrase]
