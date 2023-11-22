@@ -178,7 +178,7 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     {
         phrase.push_back({{9, 11}});  // e
         // If not one of the special phrases above, get regular minute
-        auto current_minute = get_coord_minute(hour);
+        auto current_minute = get_coord_minute(minute);
         phrase.push_back(current_minute);
     }
 

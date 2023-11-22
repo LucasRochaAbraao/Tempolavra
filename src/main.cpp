@@ -89,7 +89,7 @@ std::vector<int> map_matrix_to_1d(std::vector<std::vector<std::tuple<int,int>>>&
 void run(int hour, int minute, bool silent, int freq = 5)
 {
     auto time_coords = get_time_coords(hour, minute, freq);
-    // ex: [[(0,1), (0,2), (0,3)], [(1,4), (1,5), (1,6), (1,7)], [(4,6), (4,7), (4,8)]]
+    // ex: {{(0,1), (0,2), (0,3)}, {(1,4), (1,5), (1,6), (1,7)}, {(4,6), (4,7), (4,8)}}
 
     // string with letters representing current hour rounded to nearest 5min
     std::vector<std::string> final_phrase;
@@ -123,6 +123,7 @@ void run(int hour, int minute, bool silent, int freq = 5)
         }
         std::cout << "freq: " << freq;
     }
+    std::cout << std::endl;
 }
 
 
@@ -137,7 +138,6 @@ int main(int argc, char* argv[])
 
     if (argc == 1) // default: LED index + letters
     {
-        std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
         bool silent = false;
         run(current_hour, current_minute, silent);
         return 0;
@@ -154,6 +154,7 @@ int main(int argc, char* argv[])
         }
         if (option == "verbose")
         { // same as default (no arg), but here as reminder to add more options
+            std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
             bool silent = false;
             run(current_hour, current_minute, silent);
             return 0;

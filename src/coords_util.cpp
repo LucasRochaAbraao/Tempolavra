@@ -126,7 +126,6 @@ std::vector<IntTuple> get_coord_hour(int hour) {
     if (time_tuple != time_words.end())
     {
         const std::vector<IntTuple>& hour_data = time_tuple->second;
-
         return hour_data;
     }
 
@@ -167,7 +166,6 @@ std::vector<IntTuple> get_coord_minute(int minute) {
 
     if (time_tuple != time_words.end())
     {
-        std::cout << minute << std::endl;
         const std::vector<IntTuple>& minute_data = time_tuple->second;
         return minute_data;
     }
