@@ -14,13 +14,12 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
 
     minute = freq * std::round(minute / static_cast<float>(freq));  // make minute a multiple of 5 (wordclock precision)
 
-
     if (minute == 0)
     {  // for cases like 24 00, which would not be caught below
         if (hour > 23) {hour = 0;}
     }
 
-    // rounds minutes above 55 (which are multiples of 5 at this point) to 0 for the next hour.
+    // rounds minutes above 55 (which are multiples of 'freq' at this point) to 0 for the next hour.
     if (minute >= 60)
     {
         minute = 0;
@@ -64,9 +63,11 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     }
     else
     { // if not one of the special phrases above, get the hour coords
-        auto current_hour = get_coord_hour(hour, WordPosition::primary);      
+        auto current_hour = get_coord_hour(hour);      
         phrase.push_back(current_hour);
     }
+
+    std::cout << "hour: " << hour << std::endl;
 
     // minute coords
     if (minute == 0 && (hour == 1 or hour == 13))
@@ -177,9 +178,11 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     {
         phrase.push_back({{9, 11}});  // e
         // If not one of the special phrases above, get regular minute
-        auto current_minute = get_coord_minute(hour, WordPosition::primary);
+        auto current_minute = get_coord_minute(hour);
         phrase.push_back(current_minute);
     }
+
+    std::cout << "minute: " << minute << std::endl;
 
     // Time of day
     if (hour > 0 && hour < 12)
