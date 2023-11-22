@@ -9,8 +9,9 @@
 
 #include "../include/time_to_coords.h"
 
-//#include <Arduino.h>
 
+// TODO: Arduino code
+//#include <Arduino.h>
 
 //int LED_BUILTIN = 2;
 //
@@ -69,9 +70,11 @@ std::vector<std::string> get_word_from_matrix(const std::vector<std::tuple<int, 
 std::vector<int> map_matrix_to_1d(std::vector<std::vector<std::tuple<int,int>>>& time_coords)
 {
     std::vector<int> led_indices;
-    for (const auto& hour_data : time_coords) {
+    for (const auto& hour_data : time_coords)
+    {
         // Loop over the inner vector
-        for (const auto& coords : hour_data) {
+        for (const auto& coords : hour_data)
+        {
             int column = std::get<0>(coords);
             int row = std::get<1>(coords);
             int index = 1 + (column * 15 + row);
@@ -83,23 +86,18 @@ std::vector<int> map_matrix_to_1d(std::vector<std::vector<std::tuple<int,int>>>&
 }
 
 
-int main(int argc, char* argv[])
+void run(int hour, int minute, bool silent, int freq = 5)
 {
-    auto time_point = std::chrono::system_clock::now();
-    std::time_t time_t_now = std::chrono::system_clock::to_time_t(time_point);
-    std::tm tm_now = *std::localtime(&time_t_now);
-    // std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
-
-    int current_hour = tm_now.tm_hour;    // Current hour (0 - 23)
-    int current_minute = tm_now.tm_min;  // Current minute (0 - 59)
-
-    auto time_coords = get_time_coords(current_hour, current_minute);
+    auto time_coords = get_time_coords(hour, minute, freq);
+    // ex: [[(0,1), (0,2), (0,3)], [(1,4), (1,5), (1,6), (1,7)], [(4,6), (4,7), (4,8)]]
 
     // string with letters representing current hour rounded to nearest 5min
     std::vector<std::string> final_phrase;
-    for (const auto& coord : time_coords) {
+    for (const auto& coord : time_coords)
+    {
         auto matrix_word = get_word_from_matrix(coord);
-        for (const auto& word : matrix_word) {
+        for (const auto& word : matrix_word)
+        {
             final_phrase.push_back(word);
         }
     }
@@ -107,27 +105,82 @@ int main(int argc, char* argv[])
     // gets an array of LED index to be turned on.
     auto indices = map_matrix_to_1d(time_coords);
 
-    if (argc == 1) { // cout out LED index + letters
+    if (silent)
+    {
+        for (const auto& index : indices)
+        {
+            std::cout << index << std::endl;
+        }
+    }
+    else
+    {
         int letter_index {0};
-        for (const auto& index : indices) {
+        for (const auto& index : indices)
+        {
             std::cout << "turn on LED: " << index;
             std::cout << " - " << final_phrase[letter_index] << std::endl;
             letter_index++;
         }
+        std::cout << "freq: " << freq;
+    }
+}
+
+
+int main(int argc, char* argv[])
+{
+    auto time_point = std::chrono::system_clock::now();
+    std::time_t time_t_now = std::chrono::system_clock::to_time_t(time_point);
+    std::tm tm_now = *std::localtime(&time_t_now);
+    
+    int current_hour = tm_now.tm_hour;    // Current hour (0 - 23)
+    int current_minute = tm_now.tm_min;  // Current minute (0 - 59)
+
+    if (argc == 1) // default: LED index + letters
+    {
+        std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
+        bool silent = false;
+        run(current_hour, current_minute, silent);
         return 0;
     }
-    else if (argc > 1) { // cout LED index only.
-        std::string option = argv[1]; // only accepts "LED" as an option, otherwise error out
-        if (option == "LED") {
-            for (const auto& index : indices) {
-                std::cout << index << std::endl;
-            }
-            std::cout << std::endl;
+
+    if (argc == 2) // esp32 = silent  |  verbose (same as default)
+    {
+        std::string option = argv[1];
+        if (option == "esp32")
+        {
+            bool silent = true;
+            run(current_hour, current_minute, silent);
+            return 0;
+        }
+        if (option == "verbose")
+        { // same as default (no arg), but here as reminder to add more options
+            bool silent = false;
+            run(current_hour, current_minute, silent);
             return 0;
         }
     }
-    else {
-        std::cerr << "Usage: " << argv[0] << " [LED]" << std::endl;
+
+    if (argc == 3)
+    {
+        std::string option = argv[1];
+        int freq = atoi(argv[2]);
+
+        if (option == "test-run")
+        {
+            std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
+
+            bool silent = false;
+            run(current_hour, current_minute, silent, freq);
+            return 0;
+        }
+    }
+
+    else
+    {
+        std::cerr << "Usage: " << argv[0] << std::endl;
+        std::cerr << "[silent]: " << argv[0] << " esp32" << std::endl;
+        std::cerr << "[verbose]: " << argv[0] << " verbose" << std::endl;
+        std::cerr << "[test any freq (default=5)]: " << argv[0] << " test-run [int:freq]" << std::endl;
         std::exit(1);
     }
 }

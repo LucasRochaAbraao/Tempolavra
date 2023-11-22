@@ -14,10 +14,13 @@ bool flip_coin(double weight) {
     //Returns:
     //    Returns True if a random value is less than the given weight and False otherwise.
 
-    if (weight < 0.0 || weight > 1.0) {
+    if (weight < 0.0 || weight > 1.0)
+    {
         std::cerr << "Error: Weight must be between 0 and 1." << std::endl;
         std::exit(1);
-    } else if (weight == 0.0) {
+    }
+    else if (weight == 0.0)
+    {
         return false;
     }
 
@@ -168,7 +171,8 @@ std::vector<std::tuple<int, int>> get_coord_hour(int hour, WordPosition pos) {
 
     auto time_tuple = time_words.find(hour);
 
-    if (time_tuple != time_words.end()) {
+    if (time_tuple != time_words.end())
+    {
         const std::vector<IntTuple>& hour_data = (pos == WordPosition::primary)
         ? time_tuple->second.first
         : time_tuple->second.second;
@@ -225,7 +229,9 @@ std::vector<std::tuple<int, int>> get_coord_minute(int minute, WordPosition pos)
 
     auto time_tuple = time_words.find(minute);
 
-    if (time_tuple != time_words.end()) {
+    if (time_tuple != time_words.end())
+    {
+        std::cout << minute << std::endl;
         const std::vector<IntTuple>& minute_data = (pos == WordPosition::primary)
         ? time_tuple->second.first
         : time_tuple->second.second;
