@@ -1,8 +1,8 @@
 # Tempolavra
 
-<!-- ![Wordclock Preview](wordclock_preview.png) -->
-
 This wordclock is a creative and unique way to display the time using words instead of numbers. This C++ project currently outputs a digital wordclock to the terminal. The end goal is to actually extend to the physical world, by building an actual Wordclock with wood, glass/acrylic front plate, and a matrix of individually addressable LEDs (under the frontplate), powered by an ESP32 microcontroller. (I'll update this repo with a picture once it's done!)
+
+![Wordclock Preview](wordclock_preview.png)
 
 ### Wordclock plate design:
 ```
