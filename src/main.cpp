@@ -86,9 +86,9 @@ std::vector<int> map_matrix_to_1d(std::vector<std::vector<std::tuple<int,int>>>&
 }
 
 
-void run(int hour, int minute, bool silent, int freq = 5)
+void run(int hour, int minute, bool silent, int period = 5)
 {
-    auto time_coords = get_time_coords(hour, minute, freq);
+    auto time_coords = get_time_coords(hour, minute, period);
     // ex: {{(0,1), (0,2), (0,3)}, {(1,4), (1,5), (1,6), (1,7)}, {(4,6), (4,7), (4,8)}}
 
     // string with letters representing current hour rounded to nearest 5min
@@ -114,6 +114,8 @@ void run(int hour, int minute, bool silent, int freq = 5)
     }
     else
     {
+        std::cout << "real hour: " << hour << std::endl;
+        std::cout << "real minute: " << minute << std::endl;
         int letter_index {0};
         for (const auto& index : indices)
         {
@@ -121,7 +123,7 @@ void run(int hour, int minute, bool silent, int freq = 5)
             std::cout << " - " << final_phrase[letter_index] << std::endl;
             letter_index++;
         }
-        std::cout << "freq: " << freq;
+        std::cout << "period: " << period;
     }
     std::cout << std::endl;
 }
@@ -164,14 +166,14 @@ int main(int argc, char* argv[])
     if (argc == 3)
     {
         std::string option = argv[1];
-        int freq = atoi(argv[2]);
+        int period = atoi(argv[2]);
 
         if (option == "test-run")
         {
             std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
 
             bool silent = false;
-            run(current_hour, current_minute, silent, freq);
+            run(current_hour, current_minute, silent, period);
             return 0;
         }
     }
@@ -181,7 +183,7 @@ int main(int argc, char* argv[])
         std::cerr << "Usage: " << argv[0] << std::endl;
         std::cerr << "[silent]: " << argv[0] << " esp32" << std::endl;
         std::cerr << "[verbose]: " << argv[0] << " verbose" << std::endl;
-        std::cerr << "[test any freq (default=5)]: " << argv[0] << " test-run [int:freq]" << std::endl;
+        std::cerr << "[test any period (default=5)]: " << argv[0] << " test-run [int:period]" << std::endl;
         std::exit(1);
     }
 }

@@ -8,23 +8,23 @@
 #include "../include/coords_util.h"
 
 
-std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int minute, int freq = 5)
+std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int minute, int period = 5)
 {
     std::vector<std::vector<std::tuple<int, int>>> phrase;
 
-    minute = freq * std::round(minute / static_cast<float>(freq));  // make minute a multiple of 5 (wordclock precision)
+    minute = period * std::round(minute / static_cast<float>(period));  // make minute a multiple of 5 (wordclock precision)
 
     if (minute == 0)
     {  // for cases like 24 00, which would not be caught below
         if (hour > 23) {hour = 0;}
     }
 
-    // rounds minutes above 55 (which are multiples of 'freq' at this point) to 0 for the next hour.
+    // rounds minutes above 55 (which are multiples of 'period' at this point) to 0 for the next hour.
     if (minute >= 60)
     {
         minute = 0;
         if (hour >= 23)
-        { // in cases where 24 (or greater) was passed in as cli arg.
+        { // in cases where 24 (or greater if was passed in as cli arg).
             hour = 0;
         }
         else {hour += 1;} // all other regular hours need to increase when minute >= 60.
@@ -46,6 +46,8 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     }
 
     if (minute >= 40) {hour += 1;}
+
+    // we have settled all cases for hour > 23 before, but we just increased hour again
     if (hour == 24) {hour = 0;}
 
     // hour coords
@@ -66,8 +68,6 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
         auto current_hour = get_coord_hour(hour);      
         phrase.push_back(current_hour);
     }
-
-    std::cout << "hour: " << hour << std::endl;
 
     // minute coords
     if (minute == 0 && (hour == 1 or hour == 13))
@@ -182,8 +182,6 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
         phrase.push_back(current_minute);
     }
 
-    std::cout << "minute: " << minute << std::endl;
-
     // Time of day
     if (hour > 0 && hour < 12)
     {
@@ -210,5 +208,8 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
         }
     }
 
+
+    // std::cout << "hour: " << hour << std::endl;
+    // std::cout << "minute: " << minute << std::endl;
     return phrase;
 }
