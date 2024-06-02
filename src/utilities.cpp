@@ -54,3 +54,7 @@ void echoLogLevel() {
     }
     std::cout << "Current log level: " << logLevelStr << std::endl;
 }
+
+void setLogLevel(LogLevel level) {
+    currentLogLevel = level;
+}

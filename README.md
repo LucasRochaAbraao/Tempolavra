@@ -14,8 +14,8 @@ O   N   Z   E   G   S   E   I   S   B   D   E   Z   A   Y
 K   J   N   O   V   E   B   Q   U   I   N   Z   E   U   F
 W   R   D   O   Z   E   F   S   E   T   E   B   E   H   T
 P   R   A   S   M   E   I   O   V   D   I   A   D   A   E
-V   I   N   T   E   M   E   I   A   Q   U   I   N   Z   E
-N   O   I   T   E   T   R   I   N   T   A   E   F   Y   X
+N   O   I   T   E   M   E   I   A   Q   U   I   N   Z   E
+V   I   N   T   E   T   R   I   N   T   A   Y   F   E   X
 N   O   V   E   D   U   A   S   U   M   A   S   E   T   E
 A   M   O   D   E   Z   S   E   I   S   H   O   I   T   O
 Q   U   A   T   R   O   T   R   E   S   C   I   N   C   O

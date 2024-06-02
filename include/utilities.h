@@ -18,3 +18,4 @@ void echoLogLevel();
 LogLevel getEnvironmentLogLevel();
 bool isLogLevel(LogLevel level);
 void log(const std::string& message, LogLevel level);
+void setLogLevel(LogLevel level);

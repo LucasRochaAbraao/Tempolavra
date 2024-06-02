@@ -53,8 +53,8 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     // hour coords
     if (hour == 0)
     {
-        phrase.push_back({{8, 5}, {8, 6}, {8, 7}, {8, 8}});  // # meia
-        phrase.push_back({{14, 10}, {14, 11}, {14, 12}, {14, 13}, {14, 14}});  // # noite
+        phrase.push_back({{8, 0}, {8, 1}, {8, 2}, {8, 3}});  // # meia
+        phrase.push_back({{8, 4}, {8, 5}, {8, 6}, {8, 7}, {8, 8}});  // # noite
         if (minute == 0) {return phrase;}
     }
     else if (hour == 12)
@@ -84,7 +84,7 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
             if (flip_coin(0.8))
             {
                 phrase.push_back({{13, 13}, {13, 14}});  // da
-                phrase.push_back({{13, 0}, {13, 1}, {13, 2}, {13, 3}, {13, 4}});  // manhã
+                phrase.push_back({{14, 0}, {14, 1}, {14, 2}, {14, 3}, {14, 4}});  // manhã
             }
         }
         else if (hour >= 12 && hour < 18)
@@ -109,17 +109,23 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
 
     else if (minute == 25)
     {
-        phrase.push_back({{6, 12}});  // e
-        phrase.push_back({{8, 0}, {8, 1}, {8, 2}, {8, 3}, {8, 4}});  // vinte
-        phrase.push_back({{6, 12}});  // e
+        phrase.push_back({{8, 14}});  // e
+        phrase.push_back({{9, 0}, {9, 1}, {9, 2}, {9, 3}, {9, 4}});  // vinte
+        phrase.push_back({{9, 13}});  // e
         phrase.push_back({{12, 10}, {12, 11}, {12, 12}, {12, 13}, {12, 14}});  // cinco
+    }
+
+    else if (minute == 30)
+    {
+        phrase.push_back({{8, 14}});  // e
+        phrase.push_back({{13, 9}, {13, 10}, {13, 11}, {13, 12}});  // meia
     }
 
     else if (minute == 35)
     {
-        phrase.push_back({{6, 12}});  // e
+        phrase.push_back({{8, 14}});  // e
         phrase.push_back({{9, 5}, {9, 6}, {9, 7}, {9, 8}, {9, 9}, {9, 10}});  // trinta
-        phrase.push_back({{6, 12}});  // e
+        phrase.push_back({{9, 13}});  // e
         phrase.push_back({{12, 10}, {12, 11}, {12, 12}, {12, 13}, {12, 14}});  // cinco
     }
 
@@ -176,7 +182,7 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     }
     else
     {
-        phrase.push_back({{9, 11}});  // e
+        phrase.push_back({{9, 13}});  // e
         // If not one of the special phrases above, get regular minute
         auto current_minute = get_coord_minute(minute);
         phrase.push_back(current_minute);
@@ -188,7 +194,7 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
         if (flip_coin(0.8))
         {
             phrase.push_back({{13, 13}, {13, 14}});  // da
-            phrase.push_back({{14, 5}, {14, 6}, {14, 7}, {14, 8}, {14, 9}});  // manhã
+            phrase.push_back({{14, 0}, {14, 1}, {14, 2}, {14, 3}, {14, 4}});  // manhã
         }
     } 
     else if (hour >= 13 && hour < 19)

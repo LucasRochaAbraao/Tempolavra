@@ -11,7 +11,11 @@
 #include "../include/time_to_coords.h"
 #include "../include/utilities.h"
 
-// TODO: Arduino code
+// TODO
+// major hour position bug (but move to bitmasks first), ex:
+// - 00:40 -> {0, 0} {0, 1} {0, 2} {2, 10} {2, 11} {2, 12} {2, 13} {2, 14} {7, 0} {7, 1} {7, 2} {2, 0} {2, 1} {2, 2}... 
+// - Arduino code
+
 //#include <Arduino.h>
 
 //int LED_BUILTIN = 2;
@@ -44,14 +48,14 @@ std::vector<std::string> get_word_from_matrix(const std::vector<std::tuple<int, 
         {"K", "J", "N", "O", "V", "E", "B", "Q", "U", "I", "N", "Z", "E", "U", "F"},  // 5 nove quinze u
         {"W", "R", "D", "O", "Z", "E", "F", "S", "E", "T", "E", "B", "E", "H", "T"},  // 6 doze sete e
         {"P", "R", "A", "S", "M", "E", "I", "O", "V", "D", "I", "A", "D", "A", "E"},  // 7 pras meio dia da e
-        {"V", "I", "N", "T", "E", "M", "E", "I", "A", "Q", "U", "I", "N", "Z", "E"},  // 8 vinte meia quinze
-        {"N", "O", "I", "T", "E", "T", "R", "I", "N", "T", "A", "E", "F", "Y", "X"},  // 9 noite trinta e
+        {"M", "E", "I", "A", "N", "O", "I", "T", "E", "Q", "U", "I", "N", "Z", "E"},  // 8 noite meia quinze
+        {"V", "I", "N", "T", "E", "T", "R", "I", "N", "T", "A", "Y", "F", "E", "X"},  // 9 vinte trinta e
         {"N", "O", "V", "E", "D", "U", "A", "S", "U", "M", "A", "S", "E", "T", "E"},  // 10 nove duas uma sete
         {"A", "M", "O", "D", "E", "Z", "S", "E", "I", "S", "H", "O", "I", "T", "O"},  // 11 dez seis oito
         {"Q", "U", "A", "T", "R", "O", "T", "R", "E", "S", "C", "I", "N", "C", "O"},  // 12 quatro tres cinco
         {"H", "O", "R", "A", "S", "D", "I", "A", "E", "M", "E", "I", "A", "D", "A"},  // 13 horas dia e meia da
         {"M", "A", "N", "H", "Ã", "T", "A", "R", "D", "E", "N", "O", "I", "T", "E"}   // 14 manhã tarde noite
-        // 0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
+       // 0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
     };
 
     std::vector<std::string> leds_to_activate;
@@ -89,10 +93,10 @@ std::vector<int> map_matrix_to_1d(std::vector<std::vector<std::tuple<int,int>>>&
 }
 
 
-void run(int hour, int minute, bool silent, int period = 5)
+void run(int hour, int minute, bool silent, bool detailed, int period = 5)
 {
     auto time_coords = get_time_coords(hour, minute, period);
-    // ex: {{(0,1), (0,2), (0,3)}, {(1,4), (1,5), (1,6), (1,7)}, {(4,6), (4,7), (4,8)}}
+        // ex: {{(0,1), (0,2), (0,3)}, {(1,4), (1,5), (1,6), (1,7)}, {(4,6), (4,7), (4,8)}}
 
     // string with letters representing current hour rounded to nearest 5min
     std::vector<std::string> final_phrase;
@@ -115,10 +119,11 @@ void run(int hour, int minute, bool silent, int period = 5)
             log(fmt::format("led index: {}", index), LogLevel::LevelInfo);
         }
     }
-    else
+
+    else if (detailed)
     {
-        log(fmt::format("real hour: {}", hour), LogLevel::LevelInfo);
-        log(fmt::format("real minute: {}", minute), LogLevel::LevelInfo);
+        log(fmt::format("real hour: {}", hour), LogLevel::LevelDebug);
+        log(fmt::format("real minute: {}", minute), LogLevel::LevelDebug);
 
         int letter_index {0};
         for (const auto& index : indices)
@@ -127,9 +132,47 @@ void run(int hour, int minute, bool silent, int period = 5)
             std::cout << " - " << final_phrase[letter_index] << std::endl;
             letter_index++;
         }
-        std::cout << "period: " << period;
+        std::cout << "period: " << period << std::endl;
     }
-    std::cout << std::endl;
+
+    else
+    {
+        // for loop for inline letters
+        for (const auto& word : final_phrase)
+        {
+            std::cout << word;
+        }
+        std::cout << std::endl;
+    }
+}
+
+
+void simulate_period(int period)
+{
+    setLogLevel(LogLevel::LevelNone);
+
+    for (int hour = 0; hour < 24; ++hour)
+    {
+        for (int minute = 0; minute < 60; minute += period)
+        {
+            std::cout << "Simulating time: " << std::setw(2) << std::setfill('0') << hour << ":"
+                      << std::setw(2) << std::setfill('0') << minute << std::endl;
+            bool silent = false;
+            bool detailed = false;
+            run(hour, minute, silent, detailed, period);
+            std::cout << std::endl;
+        }
+    }
+}
+
+
+void simulate_time(int hour, int minute)
+{
+    std::cout << "Simulating time: " << std::setw(2) << std::setfill('0') << hour << ":"
+              << std::setw(2) << std::setfill('0') << minute << std::endl;
+    bool silent = false;
+    bool detailed = false;
+    run(hour, minute, silent, detailed);
 }
 
 
@@ -145,37 +188,60 @@ int main(int argc, char* argv[])
     if (argc == 1) // default: LED index + letters
     {
         bool silent = false;
-        run(current_hour, current_minute, silent);
+        bool detailed = true;
+        run(current_hour, current_minute, silent, detailed);
         return 0;
     }
 
     for (int argIndex = 1; argIndex < argc; ++argIndex) 
     {
         std::string option = argv[argIndex];
+        
         if (option == "esp32") 
         {
             bool silent = true;
-            run(current_hour, current_minute, silent);
+            bool detailed = true;
+            run(current_hour, current_minute, silent, detailed);
             return 0;
         } 
+        
         else if (option == "verbose") 
         {
             std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
             bool silent = false;
-            run(current_hour, current_minute, silent);
+            bool detailed = true;
+            run(current_hour, current_minute, silent, detailed);
             return 0;
         } 
+        
         else if (option == "log-level") 
         {
             echoLogLevel();
             return 0;
         } 
+        
         else if (option == "test-run" && argIndex + 1 < argc) 
         {
             int period = atoi(argv[argIndex + 1]);
             std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
             bool silent = false;
-            run(current_hour, current_minute, silent, period);
+            bool detailed = true;
+            run(current_hour, current_minute, silent, detailed, period);
+            return 0;
+        }
+        
+        else if (option == "simulate-period" && argIndex + 1 < argc) 
+        {
+            int period = atoi(argv[argIndex + 1]);
+            simulate_period(period);
+            return 0;
+        }
+        
+        else if (option == "simulate-time" && argIndex + 2 < argc) 
+        {
+            int hour = atoi(argv[argIndex + 1]);
+            int minute = atoi(argv[argIndex + 2]);
+            simulate_time(hour, minute);
             return 0;
         }
     }
@@ -184,5 +250,8 @@ int main(int argc, char* argv[])
     std::cerr << "[silent]: " << argv[0] << " esp32" << std::endl;
     std::cerr << "[verbose]: " << argv[0] << " verbose" << std::endl;
     std::cerr << "[test any period (default=5)]: " << argv[0] << " test-run [int:period]" << std::endl;
+    std::cerr << "[check log level]: " << argv[0] << " log-level" << std::endl;
+    std::cerr << "[simulate period (whole day)]: " << argv[0] << " simulate-period [int:period]" << std::endl;
+    std::cerr << "[simulate specific time]: " << argv[0] << " simulate-time [int:hour] [int:minute]" << std::endl;
     std::exit(1);
 }
