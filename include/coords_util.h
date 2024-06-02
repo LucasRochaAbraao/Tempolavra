@@ -9,6 +9,6 @@ using IntTuple = std::tuple<int, int>;
 
 bool flip_coin(double);
 
-std::vector<std::tuple<int, int>> get_coord_hour(int);
+std::vector<IntTuple> get_coord_hour(int);
 
-std::vector<std::tuple<int, int>> get_coord_minute(int);
+std::vector<IntTuple> get_coord_minute(int);

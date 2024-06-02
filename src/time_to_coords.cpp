@@ -1,12 +1,13 @@
-#include <iostream>
-#include <vector>
-#include <tuple>
 #include <cmath>
+#include <fmt/core.h>
+#include <iostream>
+#include <tuple>
 #include <typeinfo>
+#include <vector>
 
-#include "../include/time_to_coords.h"
 #include "../include/coords_util.h"
-
+#include "../include/time_to_coords.h"
+#include "../include/utilities.h"
 
 std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int minute, int period = 5)
 {
@@ -33,7 +34,6 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
     // if the minutes are not rounding to the next hour, but was specified in the cli.
     if (hour > 23) {hour = 0;}
 
-    //std::cout << hour << ":" << minute << std::endl;
     
     // # é 1h..., é meio dia..., é meia noite...
     if ((hour == 1 or hour == 12 or hour == 13 or hour == 0) && minute == 0)
@@ -208,8 +208,8 @@ std::vector<std::vector<std::tuple<int, int>>> get_time_coords(int hour, int min
         }
     }
 
+    log(fmt::format("calculated hour: {}", hour), LogLevel::LevelDebug);
+    log(fmt::format("calculated minute: {}", minute), LogLevel::LevelDebug);
 
-    // std::cout << "hour: " << hour << std::endl;
-    // std::cout << "minute: " << minute << std::endl;
     return phrase;
 }

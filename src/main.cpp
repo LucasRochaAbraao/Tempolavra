@@ -1,5 +1,6 @@
 #include <chrono>
 #include <ctime>
+#include <fmt/core.h>
 #include <iomanip> // for std::put_time
 #include <iostream>
 #include <string>
@@ -8,7 +9,7 @@
 #include <vector>
 
 #include "../include/time_to_coords.h"
-
+#include "../include/utilities.h"
 
 // TODO: Arduino code
 //#include <Arduino.h>
@@ -34,7 +35,7 @@
 std::vector<std::string> get_word_from_matrix(const std::vector<std::tuple<int, int>>& coords)
 {
     std::vector<std::vector<std::string>> letterMatrix = {
-        // 0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
+       // 0    1    2    3    4    5    6    7    8    9   10   11   12   13   14
         {"S", "Ã", "O", "É", "O", "J", "G", "T", "U", "R", "W", "Z", "N", "X", "A"},  // 0 sao é
         {"E", "T", "R", "Ê", "S", "C", "I", "N", "C", "O", "A", "F", "Y", "B", "P"},  // 1 tres cinco
         {"U", "M", "A", "Q", "U", "A", "T", "R", "O", "P", "V", "I", "N", "T", "E"},  // 2 uma quatro vinte
@@ -77,8 +78,10 @@ std::vector<int> map_matrix_to_1d(std::vector<std::vector<std::tuple<int,int>>>&
         {
             int column = std::get<0>(coords);
             int row = std::get<1>(coords);
-            int index = 1 + (column * 15 + row);
-            //std::cout << "Pair: (" << column << " - " << row << " = " << index << ")" << std::endl;
+            int index = column * 15 + row;
+
+            log(fmt::format("Coords: ({} - {} = {})", column, row, index), LogLevel::LevelDebug);
+
             led_indices.push_back(index);
         }
     }
@@ -109,13 +112,14 @@ void run(int hour, int minute, bool silent, int period = 5)
     {
         for (const auto& index : indices)
         {
-            std::cout << index << std::endl;
+            log(fmt::format("led index: {}", index), LogLevel::LevelInfo);
         }
     }
     else
     {
-        std::cout << "real hour: " << hour << std::endl;
-        std::cout << "real minute: " << minute << std::endl;
+        log(fmt::format("real hour: {}", hour), LogLevel::LevelInfo);
+        log(fmt::format("real minute: {}", minute), LogLevel::LevelInfo);
+
         int letter_index {0};
         for (const auto& index : indices)
         {
@@ -145,45 +149,40 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    if (argc == 2) // esp32 = silent  |  verbose (same as default)
+    for (int argIndex = 1; argIndex < argc; ++argIndex) 
     {
-        std::string option = argv[1];
-        if (option == "esp32")
+        std::string option = argv[argIndex];
+        if (option == "esp32") 
         {
             bool silent = true;
             run(current_hour, current_minute, silent);
             return 0;
-        }
-        if (option == "verbose")
-        { // same as default (no arg), but here as reminder to add more options
+        } 
+        else if (option == "verbose") 
+        {
             std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
             bool silent = false;
             run(current_hour, current_minute, silent);
             return 0;
-        }
-    }
-
-    if (argc == 3)
-    {
-        std::string option = argv[1];
-        int period = atoi(argv[2]);
-
-        if (option == "test-run")
+        } 
+        else if (option == "log-level") 
         {
+            echoLogLevel();
+            return 0;
+        } 
+        else if (option == "test-run" && argIndex + 1 < argc) 
+        {
+            int period = atoi(argv[argIndex + 1]);
             std::cout << "Current time: " << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << std::endl;
-
             bool silent = false;
             run(current_hour, current_minute, silent, period);
             return 0;
         }
     }
 
-    else
-    {
-        std::cerr << "Usage: " << argv[0] << std::endl;
-        std::cerr << "[silent]: " << argv[0] << " esp32" << std::endl;
-        std::cerr << "[verbose]: " << argv[0] << " verbose" << std::endl;
-        std::cerr << "[test any period (default=5)]: " << argv[0] << " test-run [int:period]" << std::endl;
-        std::exit(1);
-    }
+    std::cerr << "Usage: " << argv[0] << std::endl;
+    std::cerr << "[silent]: " << argv[0] << " esp32" << std::endl;
+    std::cerr << "[verbose]: " << argv[0] << " verbose" << std::endl;
+    std::cerr << "[test any period (default=5)]: " << argv[0] << " test-run [int:period]" << std::endl;
+    std::exit(1);
 }

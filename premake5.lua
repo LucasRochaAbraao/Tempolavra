@@ -9,7 +9,8 @@ project "wordclock"
     objdir "bin/obj/%{cfg.buildcfg}"
     warnings "Extra"
     files { "src/**.cpp" }
-    includedirs { "include" }
+    includedirs { "include", "/usr/include/fmt"}
+    links { "fmt" }
 
     filter "configurations:Debug"
         defines { "DEBUG" }

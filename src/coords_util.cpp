@@ -3,7 +3,7 @@
 #include <random>
 
 #include "../include/coords_util.h"
-
+#include "../include/utilities.h"
 
 bool flip_coin(double weight) {
     //Simulates a coin flip with a given weight bias.
@@ -16,7 +16,7 @@ bool flip_coin(double weight) {
 
     if (weight < 0.0 || weight > 1.0)
     {
-        std::cerr << "Error: Weight must be between 0 and 1." << std::endl;
+        log("Error: Weight must be between 0 and 1.", LogLevel::LevelError);
         std::exit(1);
     }
     else if (weight == 0.0)
